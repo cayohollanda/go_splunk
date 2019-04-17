@@ -51,6 +51,8 @@ type SearchResult struct {
 func (conn SplunkConnection) GetSearchResults(search string) (result SearchResult, err error) {
 	data := &url.Values{}
 
+	// TODO: need solution to remove earliest fixed, maybe request earliest on
+	// function parameters
 	data.Add("search", fmt.Sprintf("search %s earliest=-15m", search))
 	data.Add("output_mode", "json")
 

@@ -19,7 +19,7 @@ func TestSearch(t *testing.T) {
 		t.Error("Returns error on request")
 	}
 
-	// solve this problem in test (not converting JSON to Struct)
+	// TODO: solve this problem in test (not converting JSON to Struct)
 	if resp.Result.Raw == "" {
 		t.Error("Returns []string slice of raws equals 0")
 	}

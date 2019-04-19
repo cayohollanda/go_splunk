@@ -52,7 +52,7 @@ type SearchResult struct {
 func (conn SplunkConnection) GetSearchResults(search string) (results []SearchResult, err error) {
 	var searchResults []SearchResult
 
-	response, err := conn.HTTPGetRequest(fmt.Sprintf("%s/services/search/jobs/export?search=search %s&output_mode=json", conn.APIURL, search), nil)
+	response, err := conn.HTTPGetRequest(fmt.Sprintf("%s/services/search/jobs/export?search=search%%20%s&output_mode=json", conn.APIURL, search), nil)
 	if err != nil {
 		return []SearchResult{}, err
 	}

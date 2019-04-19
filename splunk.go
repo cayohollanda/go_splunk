@@ -1,10 +1,11 @@
 package go_splunk
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/url"
 )
 
 // SplunkConnection : guard data of connection with Splunk API
@@ -48,30 +49,32 @@ type SearchResult struct {
 // GetSearchResults : is a function to return a SearchResult of one search
 // sended to Splunk API. This function receives search param that is a string of
 // search
-func (conn SplunkConnection) GetSearchResults(search string) (result SearchResult, err error) {
-	data := &url.Values{}
+func (conn SplunkConnection) GetSearchResults(search string) (results []SearchResult, err error) {
+	var searchResults []SearchResult
 
-	// TODO: need solution to remove earliest fixed, maybe request earliest on
-	// function parameters
-	data.Add("search", fmt.Sprintf("search %s earliest=-15m", search))
-	data.Add("output_mode", "json")
-
-	response, err := conn.HTTPGetRequest(fmt.Sprintf("%s/services/search/jobs/export", conn.APIURL), data)
+	response, err := conn.HTTPGetRequest(fmt.Sprintf("%s/services/search/jobs/export?search=search %s&output_mode=json", conn.APIURL, search), nil)
 	if err != nil {
-		return SearchResult{}, err
+		return []SearchResult{}, err
 	}
-
-	var resultOfSearch SearchResult
 
 	responseToByteSlice, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return SearchResult{}, err
+		return []SearchResult{}, err
 	}
 
-	err = json.Unmarshal(responseToByteSlice, &resultOfSearch)
+	responseReader := bytes.NewReader(responseToByteSlice)
+	responseScanner := bufio.NewScanner(responseReader)
+
+	for responseScanner.Scan() {
+		var resultOfSearch SearchResult
+		err = json.Unmarshal(responseScanner.Bytes(), &resultOfSearch)
+
+		searchResults = append(searchResults, resultOfSearch)
+	}
+
 	if err != nil {
-		return SearchResult{}, err
+		return []SearchResult{}, err
 	}
 
-	return resultOfSearch, nil
+	return searchResults, nil
 }

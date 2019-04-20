@@ -15,7 +15,7 @@ var conn = &go_splunk.SplunkConnection{
 func TestSearch(t *testing.T) {
 	_, err := conn.GetSearchResults("index=test")
 
-	if err == nil {
+	if err != nil {
 		t.Error("Returns error on request")
 	}
 }

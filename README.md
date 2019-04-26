@@ -1,4 +1,6 @@
-# Go Splunk [![GoDoc](https://godoc.org/github.com/cayohollanda/go_splunk?status.svg)](https://godoc.org/github.com/cayohollanda/go_splunk)
+# Go Splunk 
+[![GoDoc](https://godoc.org/github.com/cayohollanda/go_splunk?status.svg)](https://godoc.org/github.com/cayohollanda/go_splunk) [![Go Report Card](https://goreportcard.com/badge/github.com/cayohollanda/go_splunk)](https://goreportcard.com/report/github.com/cayohollanda/go_splunk)
+
 A library that provides functions to programmer to connect and get responses of Splunk API with more abstract form and no stress
 
 # Installation
